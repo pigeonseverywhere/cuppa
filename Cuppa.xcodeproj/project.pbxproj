@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F0B6B40291A1C2800C6A4CF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B6B3F291A1C2800C6A4CF /* ContentView.swift */; };
 		3F8543B528B1F42A00325DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543B428B1F42A00325DFF /* AppDelegate.swift */; };
 		3F8543B728B1F42A00325DFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543B628B1F42A00325DFF /* ViewController.swift */; };
 		3F8543B928B1F42A00325DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F8543B828B1F42A00325DFF /* Assets.xcassets */; };
-		3F8543BC28B1F42A00325DFF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F8543BA28B1F42A00325DFF /* Main.storyboard */; };
 		3F8543C728B1F42A00325DFF /* CuppaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543C628B1F42A00325DFF /* CuppaTests.swift */; };
 		3F8543D128B1F42A00325DFF /* CuppaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543D028B1F42A00325DFF /* CuppaUITests.swift */; };
 		3F8543D328B1F42A00325DFF /* CuppaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543D228B1F42A00325DFF /* CuppaUITestsLaunchTests.swift */; };
+		3F8543E028B1F6E500325DFF /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543DF28B1F6E500325DFF /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,17 +35,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F0B6B3F291A1C2800C6A4CF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3F8543B128B1F42A00325DFF /* Cuppa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cuppa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F8543B428B1F42A00325DFF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3F8543B628B1F42A00325DFF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3F8543B828B1F42A00325DFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3F8543BB28B1F42A00325DFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3F8543BD28B1F42A00325DFF /* Cuppa.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cuppa.entitlements; sourceTree = "<group>"; };
 		3F8543C228B1F42A00325DFF /* CuppaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CuppaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F8543C628B1F42A00325DFF /* CuppaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuppaTests.swift; sourceTree = "<group>"; };
 		3F8543CC28B1F42A00325DFF /* CuppaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CuppaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F8543D028B1F42A00325DFF /* CuppaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuppaUITests.swift; sourceTree = "<group>"; };
 		3F8543D228B1F42A00325DFF /* CuppaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuppaUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3F8543DF28B1F6E500325DFF /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		3F8543E128B1FAB700325DFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,11 +98,13 @@
 		3F8543B328B1F42A00325DFF /* Cuppa */ = {
 			isa = PBXGroup;
 			children = (
+				3F8543E128B1FAB700325DFF /* Info.plist */,
 				3F8543B428B1F42A00325DFF /* AppDelegate.swift */,
+				3F8543DF28B1F6E500325DFF /* main.swift */,
 				3F8543B628B1F42A00325DFF /* ViewController.swift */,
 				3F8543B828B1F42A00325DFF /* Assets.xcassets */,
-				3F8543BA28B1F42A00325DFF /* Main.storyboard */,
 				3F8543BD28B1F42A00325DFF /* Cuppa.entitlements */,
+				3F0B6B3F291A1C2800C6A4CF /* ContentView.swift */,
 			);
 			path = Cuppa;
 			sourceTree = "<group>";
@@ -226,7 +231,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F8543B928B1F42A00325DFF /* Assets.xcassets in Resources */,
-				3F8543BC28B1F42A00325DFF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +257,8 @@
 			files = (
 				3F8543B728B1F42A00325DFF /* ViewController.swift in Sources */,
 				3F8543B528B1F42A00325DFF /* AppDelegate.swift in Sources */,
+				3F0B6B40291A1C2800C6A4CF /* ContentView.swift in Sources */,
+				3F8543E028B1F6E500325DFF /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,17 +293,6 @@
 			targetProxy = 3F8543CD28B1F42A00325DFF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		3F8543BA28B1F42A00325DFF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3F8543BB28B1F42A00325DFF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3F8543D428B1F42A00325DFF /* Debug */ = {
@@ -423,8 +418,9 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Cuppa/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -448,8 +444,9 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Cuppa/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
