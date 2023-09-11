@@ -6,11 +6,19 @@
 //
 
 import SwiftUI
-
-struct ContentView: View {
+struct ContentView : View {
     var body: some View {
-        Text("Welcome to Cuppa")
+        VStack {
+            Text("Welcome to Cuppa!").font(.title).padding(.all)
+            HStack {
+                Text("Version v1.0.0").padding(.vertical)
+                Spacer()
+                    .frame(maxWidth: 40)
+                Text("subversion")
+            }
+        }
     }
+
 }
 
 struct ContentView_Previews: PreviewProvider {

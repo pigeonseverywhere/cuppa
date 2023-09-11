@@ -11,6 +11,26 @@ import AppKit
 import SwiftUI
 
 
+@main
+struct CuppaApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    
+    init() {
+        UserDefaults.standard.register(defaults: [
+            "customDuration": 1800,
+            "launchAtLogin": false
+        ])
+    }
+
+    
+    var body: some Scene {
+        Settings {
+            SettingsView()
+        }
+    }
+
+}
+
 //@main
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow!
@@ -18,94 +38,60 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var caffeinateProc: Process!
     private var timerDuration: TimeInterval!
     private var isActive: Bool!
-
+    private var toggleIndefinitely: Bool!
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         isActive = false
         caffeinateProc = nil
         toggleCupSymbol()
         setupMenus()
-        
-//        // TODO small window to show preferences, utilities etc.
-//        let contentView = ContentView()
-//        window = NSWindow(
-//                   contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
-//                   styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-//                   backing: .buffered, defer: false)
-//               window.center()
-//               window.setFrameAutosaveName("Main Window")
-//               window.contentView = NSHostingView(rootView: contentView)
-//               window.makeKeyAndOrderFront(nil)
 
     }
-    
-    // TODO get rid of? Was having trouble with UIapplication not being in scope
-//    func application(_ application: NSApplication, didFinishLaunchingWithOptions launchOptions: [NSApplication.ActivationOptions /*LaunchOptionsKey*/ : Any]? = nil) -> Bool {
-//        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-//        isActive = false
-//        caffeinateProc = nil
-//        toggleCupSymbol()
-//        setupMenus()
-        
-//        let center = NSUserNotificationCenter.current()
-//        center.requestAuthorization(options: [.alert, .sound, .badge, .provisional]) { granted, error in
-//
-//            if let error = error {
-//                // Handle the error here.
-//            }
-//
-//            // Provisional authorization granted.
-//        }
-        
-        
-//    }
-
     
     func setupMenus() {
         let menu = NSMenu()
         let custom = NSMenuItem(title: "Custom duration", action: #selector(set_custom), keyEquivalent: "c")
-        custom.allowsKeyEquivalentWhenHidden = true;
-        custom.keyEquivalentModifierMask = [.control]
         menu.addItem(custom)
         
         let five = NSMenuItem(title: "5 minutes", action: #selector(set_five), keyEquivalent: "1")
-        five.allowsKeyEquivalentWhenHidden = true;
-        five.keyEquivalentModifierMask = [.control]
+        // TODO: add keyboard shortcuts- currently this does not quite work
+//        five.allowsKeyEquivalentWhenHidden = true;
+//        five.keyEquivalentModifierMask = [.control]
         menu.addItem(five)
         
         let fifteen = NSMenuItem(title: "15 minutes", action: #selector(set_fifteen), keyEquivalent: "2" )
-        fifteen.allowsKeyEquivalentWhenHidden = true;
-        fifteen.keyEquivalentModifierMask = [.command, .option]
         menu.addItem(fifteen)
         
         let thirty = NSMenuItem(title: "30 minutes", action: #selector(set_thirty), keyEquivalent: "3" )
-        thirty.allowsKeyEquivalentWhenHidden = true;
-        thirty.keyEquivalentModifierMask = [.command, .option]
         menu.addItem(thirty)
         
         let one_hour = NSMenuItem(title: "1 hour", action: #selector(set_hour), keyEquivalent: "4" )
-        one_hour.allowsKeyEquivalentWhenHidden = true;
-        one_hour.keyEquivalentModifierMask = [.command, .option]
         menu.addItem(one_hour)
         
+        let infinite = NSMenuItem(title: "Indefinitely", action: #selector(set_indefinite), keyEquivalent: "i" )
+        menu.addItem(infinite)
         
         menu.addItem(NSMenuItem.separator())
         
         let deactivate = NSMenuItem(title: "Deactivate", action: #selector(deactivateCaffeinate), keyEquivalent: "d")
         menu.addItem(deactivate)
         deactivate.allowsKeyEquivalentWhenHidden = true;
-        deactivate.keyEquivalentModifierMask = [.command, .option]
         
+        menu.addItem(NSMenuItem.separator())
+        
+        let settings = NSMenuItem(title: "Settings", action: #selector(settings), keyEquivalent: "s" )
+        menu.addItem(settings)
+        
+        menu.addItem(NSMenuItem.separator())
+        
+        menu.addItem(withTitle: "About", action: #selector(about), keyEquivalent: "a")
         menu.addItem(withTitle: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
-        one_hour.keyEquivalentModifierMask = [.command, .option]
-        
+    
+
         statusItem.menu = menu
     }
     
-    @objc func set_test() {
-        print("Testing...")
-        activateCaffeinate(duration: 30)
-    }
     @objc func set_five() {
         activateCaffeinate(duration: 300)
     }
@@ -118,9 +104,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func set_hour() {
         activateCaffeinate(duration: 3600)
     }
-    
     @objc func set_custom() {
-        // TODO
+        // TODO: toggle add custom input view
+    }
+    @objc func set_indefinite() {
+        self.toggleIndefinitely = true
+        activateCaffeinate(duration: 0, indefinitely: true)
+    }
+    
+    @objc func settings() {
+        let launch = UserDefaults.standard.bool(forKey: "launchAtLogin")
+        print(launch)
+        if #available(macOS 13, *) {
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        } else {
+            NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+        }
+    }
+    
+    @objc func about() {
+        NSApp.orderFrontStandardAboutPanel()
     }
     
     // Toggle symbol to full or empty depending on state
@@ -130,8 +133,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             symbolName = "custom.cup.and.saucer.full"
             
         }
-        // #DEBUGGING
-        //print("setting symbol to ", symbolName)
         if let statusButton = statusItem.button {
             if let image = NSImage(named: symbolName) {
                 let config = NSImage.SymbolConfiguration(paletteColors: [.controlTextColor, .controlAccentColor])
@@ -141,30 +142,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     // Activate caffeinate command for number minutes
-    @objc func activateCaffeinate(duration: TimeInterval) {
+    @objc func activateCaffeinate(duration: TimeInterval, indefinitely: Bool = false) {
         // Terminate existing instances
         if (self.isActive) {
-            terminateCaffeinate() // TODO
+            terminateCaffeinate()
         }
         self.timerDuration = duration
         self.isActive = true
         toggleCupSymbol()
-        spawnCaffeinate()
+        spawnCaffeinate(indefinitely: indefinitely)
 
-        // Spawn separate thread for job
-        DispatchQueue.main.asyncAfter(deadline: .now() + self.timerDuration) {
-            self.deactivateCaffeinate()
+        // Spawn separate thread for job if not running infinitely
+        if (!indefinitely) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + self.timerDuration) {
+                self.deactivateCaffeinate()
+            }
         }
     }
     
-    
     // Spawn caffeinate process
-    func spawnCaffeinate() {
+    func spawnCaffeinate(indefinitely: Bool = false) {
         let task = Process()
         task.launchPath = "/usr/bin/caffeinate"
         task.standardOutput = FileHandle.nullDevice // Equivalent to /dev/null
         task.standardError = FileHandle.nullDevice
-        task.arguments = ["-dt", String(format: "%.f", self.timerDuration)]
+        if indefinitely == false {
+            task.arguments = ["-dt", String(format: "%.f", self.timerDuration)]
+        } else {
+            task.arguments = []
+        }
         self.caffeinateProc = task
         task.launch()
     }
@@ -172,7 +178,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // Terminates current caffeinate process
     func terminateCaffeinate() {
-        // Double check there actually is an instance running
+        // Check there actually is an instance running
         if (self.caffeinateProc == nil) {
             return
         }
@@ -182,30 +188,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func deactivateCaffeinate() {
-        // #DEBUGGING
-        //print("Deactivating caffeinate instance...")
         terminateCaffeinate()
         self.isActive = false
+        self.toggleIndefinitely = false
         self.caffeinateProc = nil
         toggleCupSymbol()
     }
 
     func notifyTermination(notification: NSNotification) {
-        // send notif for cuppa finished
-        // if user setting notif is allowed
+        // TODO: send notif for cuppa timer finished
+        // TODO: if user setting notif is allowed
     }
     
     
-    
     func applicationWillTerminate(_ aNotification: Notification) {
+        // Tear down application
         terminateCaffeinate()
-        // Insert code here to tear down your application
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
-
 
 }
 

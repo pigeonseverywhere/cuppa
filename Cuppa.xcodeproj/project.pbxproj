@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		3F0B6B40291A1C2800C6A4CF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B6B3F291A1C2800C6A4CF /* ContentView.swift */; };
-		3F8543B528B1F42A00325DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543B428B1F42A00325DFF /* AppDelegate.swift */; };
+		3F8543B528B1F42A00325DFF /* Cuppa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543B428B1F42A00325DFF /* Cuppa.swift */; };
 		3F8543B728B1F42A00325DFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543B628B1F42A00325DFF /* ViewController.swift */; };
 		3F8543B928B1F42A00325DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F8543B828B1F42A00325DFF /* Assets.xcassets */; };
 		3F8543C728B1F42A00325DFF /* CuppaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543C628B1F42A00325DFF /* CuppaTests.swift */; };
 		3F8543D128B1F42A00325DFF /* CuppaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543D028B1F42A00325DFF /* CuppaUITests.swift */; };
 		3F8543D328B1F42A00325DFF /* CuppaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543D228B1F42A00325DFF /* CuppaUITestsLaunchTests.swift */; };
-		3F8543E028B1F6E500325DFF /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543DF28B1F6E500325DFF /* main.swift */; };
+		3F856AF32AAE0B2700E40109 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F856AF22AAE0B2700E40109 /* SettingsView.swift */; };
+		3F856AF62AAEC99D00E40109 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3F856AF52AAEC99D00E40109 /* Credits.rtf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +38,7 @@
 /* Begin PBXFileReference section */
 		3F0B6B3F291A1C2800C6A4CF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3F8543B128B1F42A00325DFF /* Cuppa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cuppa.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F8543B428B1F42A00325DFF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3F8543B428B1F42A00325DFF /* Cuppa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cuppa.swift; sourceTree = "<group>"; };
 		3F8543B628B1F42A00325DFF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3F8543B828B1F42A00325DFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F8543BD28B1F42A00325DFF /* Cuppa.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cuppa.entitlements; sourceTree = "<group>"; };
@@ -46,8 +47,9 @@
 		3F8543CC28B1F42A00325DFF /* CuppaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CuppaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F8543D028B1F42A00325DFF /* CuppaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuppaUITests.swift; sourceTree = "<group>"; };
 		3F8543D228B1F42A00325DFF /* CuppaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuppaUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		3F8543DF28B1F6E500325DFF /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3F8543E128B1FAB700325DFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3F856AF22AAE0B2700E40109 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3F856AF52AAEC99D00E40109 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,12 +101,13 @@
 			isa = PBXGroup;
 			children = (
 				3F8543E128B1FAB700325DFF /* Info.plist */,
-				3F8543B428B1F42A00325DFF /* AppDelegate.swift */,
-				3F8543DF28B1F6E500325DFF /* main.swift */,
+				3F856AF52AAEC99D00E40109 /* Credits.rtf */,
+				3F8543B428B1F42A00325DFF /* Cuppa.swift */,
 				3F8543B628B1F42A00325DFF /* ViewController.swift */,
 				3F8543B828B1F42A00325DFF /* Assets.xcassets */,
 				3F8543BD28B1F42A00325DFF /* Cuppa.entitlements */,
 				3F0B6B3F291A1C2800C6A4CF /* ContentView.swift */,
+				3F856AF22AAE0B2700E40109 /* SettingsView.swift */,
 			);
 			path = Cuppa;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F8543B928B1F42A00325DFF /* Assets.xcassets in Resources */,
+				3F856AF62AAEC99D00E40109 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,10 +259,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F856AF32AAE0B2700E40109 /* SettingsView.swift in Sources */,
 				3F8543B728B1F42A00325DFF /* ViewController.swift in Sources */,
-				3F8543B528B1F42A00325DFF /* AppDelegate.swift in Sources */,
+				3F8543B528B1F42A00325DFF /* Cuppa.swift in Sources */,
 				3F0B6B40291A1C2800C6A4CF /* ContentView.swift in Sources */,
-				3F8543E028B1F6E500325DFF /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
