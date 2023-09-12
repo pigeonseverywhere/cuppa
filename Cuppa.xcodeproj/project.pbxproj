@@ -16,6 +16,7 @@
 		3F8543D328B1F42A00325DFF /* CuppaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8543D228B1F42A00325DFF /* CuppaUITestsLaunchTests.swift */; };
 		3F856AF32AAE0B2700E40109 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F856AF22AAE0B2700E40109 /* SettingsView.swift */; };
 		3F856AF62AAEC99D00E40109 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3F856AF52AAEC99D00E40109 /* Credits.rtf */; };
+		3FEAC4E92AB02BD200CD904D /* CustomDurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEAC4E82AB02BD200CD904D /* CustomDurationStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		3F8543E128B1FAB700325DFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3F856AF22AAE0B2700E40109 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3F856AF52AAEC99D00E40109 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		3FEAC4E82AB02BD200CD904D /* CustomDurationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDurationStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				3F8543E128B1FAB700325DFF /* Info.plist */,
 				3F856AF52AAEC99D00E40109 /* Credits.rtf */,
 				3F8543B428B1F42A00325DFF /* Cuppa.swift */,
+				3FEAC4E82AB02BD200CD904D /* CustomDurationStore.swift */,
 				3F8543B628B1F42A00325DFF /* ViewController.swift */,
 				3F8543B828B1F42A00325DFF /* Assets.xcassets */,
 				3F8543BD28B1F42A00325DFF /* Cuppa.entitlements */,
@@ -259,6 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FEAC4E92AB02BD200CD904D /* CustomDurationStore.swift in Sources */,
 				3F856AF32AAE0B2700E40109 /* SettingsView.swift in Sources */,
 				3F8543B728B1F42A00325DFF /* ViewController.swift in Sources */,
 				3F8543B528B1F42A00325DFF /* Cuppa.swift in Sources */,

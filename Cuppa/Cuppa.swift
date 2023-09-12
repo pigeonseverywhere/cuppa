@@ -9,6 +9,7 @@ import Cocoa
 import Foundation
 import AppKit
 import SwiftUI
+import UserNotifications
 
 
 @main
@@ -17,15 +18,21 @@ struct CuppaApp: App {
     
     init() {
         UserDefaults.standard.register(defaults: [
-            "customDuration": 1800,
-            "launchAtLogin": false
+            "customDuration": 30,
+            "launchAtLogin": false,
+            "notifyOnTerminate": false,
+            "lastVisitedPreference": 2,
         ])
     }
 
+    @AppStorage("lastVisitedPreference") private var pref = 1
     
     var body: some Scene {
+//        WindowGroup {
+//             CustomDurationPopover()
+//         }
         Settings {
-            SettingsView()
+            SettingsView(activateCaffeinate: self.appDelegate.activateCaffeinate, tabSelection: $pref)
         }
     }
 
@@ -39,6 +46,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var timerDuration: TimeInterval!
     private var isActive: Bool!
     private var toggleIndefinitely: Bool!
+    private var popover: NSPopover!
+  
+//    UNUserNotificationCenter.current().delegate = self
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -46,27 +56,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         caffeinateProc = nil
         toggleCupSymbol()
         setupMenus()
+        
+        if let button = statusItem.button {
+                button.action = #selector(self.doSomeAction(sender:))
+                button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+            }
 
     }
     
+    @objc func doSomeAction(sender: NSStatusItem) {
+        // TODO: allow user to see how long cuppa has until deactivation
+        let event = NSApp.currentEvent!
+
+            if event.type == NSEvent.EventType.rightMouseUp {
+                print("right? ")
+            } else {
+                print("left?")
+            }
+    }
+
+    func applicationWillUpdate(_ notification: Notification) {
+        NSApp.arrangeInFront(nil)
+    }
+
     func setupMenus() {
+        @AppStorage("customDuration") var customDuration = 0.0
+        
         let menu = NSMenu()
-        let custom = NSMenuItem(title: "Custom duration", action: #selector(set_custom), keyEquivalent: "c")
+        // TODO custom timer
+        let custom = NSMenuItem(title: "Custom (\(String(format: "%.0f", customDuration)) minutes)", action: #selector(set_custom), keyEquivalent: "c")
         menu.addItem(custom)
         
-        let five = NSMenuItem(title: "5 minutes", action: #selector(set_five), keyEquivalent: "1")
-        // TODO: add keyboard shortcuts- currently this does not quite work
-//        five.allowsKeyEquivalentWhenHidden = true;
-//        five.keyEquivalentModifierMask = [.control]
+        // TODO: add global keyboard shortcuts- currently shortcuts only work when menu is shown
+    
+        let five = NSMenuItem(title: "5 minutes", action: #selector(set_five), keyEquivalent: "")
         menu.addItem(five)
         
-        let fifteen = NSMenuItem(title: "15 minutes", action: #selector(set_fifteen), keyEquivalent: "2" )
+        let fifteen = NSMenuItem(title: "15 minutes", action: #selector(set_fifteen), keyEquivalent: "" )
         menu.addItem(fifteen)
         
-        let thirty = NSMenuItem(title: "30 minutes", action: #selector(set_thirty), keyEquivalent: "3" )
+        let thirty = NSMenuItem(title: "30 minutes", action: #selector(set_thirty), keyEquivalent: "" )
         menu.addItem(thirty)
         
-        let one_hour = NSMenuItem(title: "1 hour", action: #selector(set_hour), keyEquivalent: "4" )
+        let one_hour = NSMenuItem(title: "1 hour", action: #selector(set_hour), keyEquivalent: "" )
         menu.addItem(one_hour)
         
         let infinite = NSMenuItem(title: "Indefinitely", action: #selector(set_indefinite), keyEquivalent: "i" )
@@ -92,6 +124,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = menu
     }
     
+    func launchOnLogin() {
+        @AppStorage("launchAtLogin") var launch = false
+        if launch {
+            print("will launch")
+            NSApp.enableRelaunchOnLogin()
+        } else {
+            print("will not launch")
+            NSApp.disableRelaunchOnLogin()
+        }
+    }
+    
     @objc func set_five() {
         activateCaffeinate(duration: 300)
     }
@@ -105,7 +148,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         activateCaffeinate(duration: 3600)
     }
     @objc func set_custom() {
-        // TODO: toggle add custom input view
+//        print(UserDefaults.standard.double(forKey: "customDuration"))
+        UserDefaults.standard.set(3, forKey: "lastVisitedPreference")
+        settings()
     }
     @objc func set_indefinite() {
         self.toggleIndefinitely = true
@@ -113,10 +158,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func settings() {
-        let launch = UserDefaults.standard.bool(forKey: "launchAtLogin")
-        print(launch)
         if #available(macOS 13, *) {
             NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+            NSApp.arrangeInFront(nil)
         } else {
             NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
         }
@@ -143,6 +187,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // Activate caffeinate command for number minutes
     @objc func activateCaffeinate(duration: TimeInterval, indefinitely: Bool = false) {
+        print("Activated for \(duration / 60) minutes")
+
+        setupMenus()
         // Terminate existing instances
         if (self.isActive) {
             terminateCaffeinate()
@@ -188,17 +235,46 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func deactivateCaffeinate() {
+        if UserDefaults.standard.bool(forKey: "notifyOnTerminate") {
+            print("will notify user")
+            setNotification()
+        }
         terminateCaffeinate()
         self.isActive = false
         self.toggleIndefinitely = false
         self.caffeinateProc = nil
         toggleCupSymbol()
     }
-
-    func notifyTermination(notification: NSNotification) {
-        // TODO: send notif for cuppa timer finished
-        // TODO: if user setting notif is allowed
+    
+    @objc func setNotification(duration: TimeInterval = 1) {
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { (settings) in
+            if settings.authorizationStatus == .authorized {
+                let id = "Deactivated"
+                let content = UNMutableNotificationContent()
+                content.title = "Cuppa has deactivated!"
+                content.body = "Your Mac screen will go to sleep normally"
+                content.sound = UNNotificationSound.default
+                
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                
+                let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+                center.add(request) { (error) in
+                    if error != nil {
+                        print(error?.localizedDescription as Any)
+                    }
+                    
+                }
+            }
+        }
     }
+
+//
+//    func notifyTermination(notification: NSNotification) {
+//
+//        // TODO: send notif for cuppa timer finished
+//        // TODO: if user setting notif is allowed
+//    }
     
     
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -211,4 +287,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
 }
-
