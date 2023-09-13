@@ -8,6 +8,7 @@ experience.
 
 [Download the app](https://github.com/pigeonseverywhere/cuppa/releases/latest/download/Cuppa_v1_0_1.zip)
 
+If you can't open the app try `ctrl` clicking Cuppa and then clicking open from the context menu. Or check out this guide from [Trend Micro](https://news.trendmicro.com/2021/12/16/how-to-fix-macos-cannot-verify-that-this-app-is-free-from-malware-error/)
 
 ## Demo
 Lives in the menu bar
