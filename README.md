@@ -16,10 +16,10 @@ Cup fills when activated
 
 ### A little bit of lore? 
 I had previously been a user of Tomas Franzén's app *Caffeine*, but sadly maintainence for
-it ceased a few years ago. After digging around and stumbling across the `caffeinate`
-command, I made a dead simple menu bar app (probably my first piece of code) to use personally for a few years. 
+it ceased a few years ago. Then, a while back I stumbled across the `caffeinate`
+command, and powered by curiosity about Apple development I made a dead simple menu bar app (probably my first few pieces of personal code) to use for a few years. 
 
-After actually getting into coding, I decided to revamp this personal utility a bit and polish it up- and here we are. 
+Recently I decided to revamp this personal utility a bit and polish it up- so here we are. 
 
 
 
