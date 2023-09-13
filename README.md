@@ -4,6 +4,9 @@ A little menu bar app to easily keep your mac screen awake.
 It wraps around the Apple command line utility `caffeinate`, to provide a smoother
 experience. 
 
+## Download
+[Download the app](https://github.com/pigeonseverywhere/cuppa/releases/latest/download/Cuppa_v1_0_1.zip)
+
 Lives in the menu
 
 <img width="561" alt="cuppa_menu" src="https://github.com/pigeonseverywhere/cuppa/assets/67492876/e1e88773-b66b-49ac-b426-d4f7ef970c1b">
