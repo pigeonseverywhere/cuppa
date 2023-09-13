@@ -1,5 +1,5 @@
 //
-//  AppDelegate.swift
+//  Cuppa.swift
 //  Cuppa
 //
 //  Created by Yunshu D on 21/8/2022.
@@ -22,20 +22,20 @@ struct CuppaApp: App {
             "launchAtLogin": false,
             "notifyOnTerminate": false,
             "lastVisitedPreference": 2,
+            "firstLaunch": true,
+            "launchPreference": false,
+            "cupIcon": "custom",
+
         ])
     }
 
-    @AppStorage("lastVisitedPreference") private var pref = 1
+    @AppStorage("lastVisitedPreference") private var recentPref = 1
     
     var body: some Scene {
-//        WindowGroup {
-//             CustomDurationPopover()
-//         }
         Settings {
-            SettingsView(activateCaffeinate: self.appDelegate.activateCaffeinate, tabSelection: $pref)
+            SettingsView(activateCaffeinate: self.appDelegate.activateCaffeinate, toggleCupSymbol: self.appDelegate.toggleCupSymbol, tabSelection: $recentPref)
         }
     }
-
 }
 
 //@main
@@ -51,6 +51,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //    UNUserNotificationCenter.current().delegate = self
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        @AppStorage("lastVisitedPreference") var pref = 1
+        @AppStorage("firstLaunch") var  firstLaunch = false
+        @AppStorage("launchPreference") var  launchPref = false
+        
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         isActive = false
         caffeinateProc = nil
@@ -61,7 +65,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 button.action = #selector(self.doSomeAction(sender:))
                 button.sendAction(on: [.leftMouseUp, .rightMouseUp])
             }
-
+        
+        if (firstLaunch || launchPref) {
+            settings()
+            UserDefaults.standard.set(false, forKey: "firstLaunch")
+        }
     }
     
     @objc func doSomeAction(sender: NSStatusItem) {
@@ -148,7 +156,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         activateCaffeinate(duration: 3600)
     }
     @objc func set_custom() {
-//        print(UserDefaults.standard.double(forKey: "customDuration"))
         UserDefaults.standard.set(3, forKey: "lastVisitedPreference")
         settings()
     }
@@ -172,15 +179,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // Toggle symbol to full or empty depending on state
     func toggleCupSymbol() {
+        @AppStorage("cupIcon") var icon = "custom"
+        
         var symbolName = "custom.cup.and.saucer.empty"
-        if isActive {
+        if (isActive) {
             symbolName = "custom.cup.and.saucer.full"
-            
         }
+        else if (icon == "skeleton"){
+            symbolName = "cup.and.saucer"
+        }
+        
+        let config = NSImage.SymbolConfiguration(paletteColors: [.controlTextColor, .controlAccentColor])
+
         if let statusButton = statusItem.button {
-            if let image = NSImage(named: symbolName) {
-                let config = NSImage.SymbolConfiguration(paletteColors: [.controlTextColor, .controlAccentColor])
-                statusButton.image = image.withSymbolConfiguration(config)
+            if (icon == "custom"){
+                if let image = NSImage(named: symbolName) {
+                    statusButton.image = image.withSymbolConfiguration(config)
+                }
+            } else {
+                print("skellyicon")
+                if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: "cup") {
+                    statusButton.image = image.withSymbolConfiguration(config)
+                }
             }
         }
     }
