@@ -38,6 +38,14 @@ struct CuppaApp: App {
     }
 }
 
+extension NSEvent {
+    var isRightClick: Bool {
+        let rightClick = (self.type == .rightMouseDown || self.type == .rightMouseUp)
+        let controlClick = self.modifierFlags.contains(.control)
+        return rightClick || controlClick
+    }
+}
+
 //@main
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow!
@@ -61,31 +69,54 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         toggleCupSymbol()
         setupMenus()
         
-        if let button = statusItem.button {
-                button.action = #selector(self.doSomeAction(sender:))
-                button.sendAction(on: [.leftMouseUp, .rightMouseUp])
-            }
-        
+        // Show preferences if first launch
         if (firstLaunch || launchPref) {
             settings()
             UserDefaults.standard.set(false, forKey: "firstLaunch")
         }
+        
+        
+        // TODO: detect left/right button click
+        if let button = statusItem.button {
+            print("button initiated")
+            button.action = #selector(onClick)
+            button.sendAction(on: [.leftMouseDown, .rightMouseDown, .rightMouseUp, .leftMouseUp])
+        }
     }
     
-    @objc func doSomeAction(sender: NSStatusItem) {
+    
+    @objc
+    func onClick() {
+        print("bleh")
+        if let event = NSApp.currentEvent, event.isRightClick {
+            print("right")
+        } else {
+          print("left")
+        }
+    }
+    
+    @objc func doSomeAction(_ sender: NSStatusBarButton) {
         // TODO: allow user to see how long cuppa has until deactivation
-        let event = NSApp.currentEvent!
-
-            if event.type == NSEvent.EventType.rightMouseUp {
-                print("right? ")
-            } else {
-                print("left?")
+        print("we are here")
+        guard let event = NSApp.currentEvent else {
+            print("naw")
+            return
+            
+        }
+            switch event.type {
+            case .rightMouseDown:
+//                statusItem.popUpMenu(statusItemMenuHandler.menu)
+                print("right!")
+            default:
+                print("leftg!")
             }
     }
 
     func applicationWillUpdate(_ notification: Notification) {
         NSApp.arrangeInFront(nil)
     }
+    
+    
 
     func setupMenus() {
         @AppStorage("customDuration") var customDuration = 0.0
@@ -125,10 +156,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         menu.addItem(NSMenuItem.separator())
         
-        menu.addItem(withTitle: "About", action: #selector(about), keyEquivalent: "a")
+        menu.addItem(withTitle: "About Cuppa...", action: #selector(about), keyEquivalent: "")
         menu.addItem(withTitle: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
     
-
+        
         statusItem.menu = menu
     }
     
@@ -192,12 +223,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let config = NSImage.SymbolConfiguration(paletteColors: [.controlTextColor, .controlAccentColor])
 
         if let statusButton = statusItem.button {
-            if (icon == "custom"){
+            if (icon == "custom" || isActive){
                 if let image = NSImage(named: symbolName) {
                     statusButton.image = image.withSymbolConfiguration(config)
                 }
             } else {
-                print("skellyicon")
                 if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: "cup") {
                     statusButton.image = image.withSymbolConfiguration(config)
                 }
@@ -207,7 +237,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // Activate caffeinate command for number minutes
     @objc func activateCaffeinate(duration: TimeInterval, indefinitely: Bool = false) {
-        print("Activated for \(duration / 60) minutes")
 
         setupMenus()
         // Terminate existing instances
@@ -236,7 +265,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if indefinitely == false {
             task.arguments = ["-dt", String(format: "%.f", self.timerDuration)]
         } else {
-            task.arguments = []
+            task.arguments = ["-d"]
         }
         self.caffeinateProc = task
         task.launch()
@@ -251,14 +280,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         if (self.caffeinateProc.isRunning) {
             self.caffeinateProc.terminate()
+            if UserDefaults.standard.bool(forKey: "notifyOnTerminate") {
+                setNotification()
+            }
         }
     }
     
     @objc func deactivateCaffeinate() {
-        if UserDefaults.standard.bool(forKey: "notifyOnTerminate") {
-            print("will notify user")
-            setNotification()
-        }
         terminateCaffeinate()
         self.isActive = false
         self.toggleIndefinitely = false
